@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Brunei Satay House</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="images/logo.png" alt="Brunei Satay House Logo">
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Back to Menu</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="payment-section">
+        <h2>Payment Details</h2>
+        <form action="order-confirmation.html" method="post" class="payment-form">
+            <div class="form-group">
+                <label for="name">Name on Card:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="card-number">Card Number:</label>
+                <input type="text" id="card-number" name="card-number" pattern="\d{16}" placeholder="1234 5678 9012 3456" required>
+            </div>
+            <div class="form-group">
+                <label for="expiry">Expiry Date:</label>
+                <input type="month" id="expiry" name="expiry" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" name="cvv" pattern="\d{3}" placeholder="123" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Total Amount:</label>
+                <input type="text" id="amount" name="amount" value="$0.00" readonly>
+            </div>
+            <button type="submit" class="cta-btn">Confirm Payment</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Brunei Satay House. All rights reserved.</p>
+    </footer>
+</body>
+</html>

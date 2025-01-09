@@ -1,0 +1,135 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+header {
+    background-color: #b8860b;
+    padding: 10px 0;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+nav .logo img {
+    width: 150px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+.main-banner {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/4b/Satay_banner.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 150px 20px;
+    text-align: center;
+}
+
+.main-banner .cta-btn {
+    background-color: #b8860b;
+    color: #fff;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.main-banner h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.menu-section {
+    padding: 40px 20px;
+    background-color: white;
+    text-align: center;
+}
+
+.menu-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.menu-item {
+    display: inline-block;
+    margin: 0 15px;
+    width: 250px;
+}
+
+.menu-item img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.menu-item h3 {
+    font-size: 1.5rem;
+    margin-top: 10px;
+}
+
+.menu-item p {
+    font-size: 1rem;
+    margin-top: 5px;
+}
+
+.locations-section {
+    background-color: #b8860b;
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.locations-section .cta-btn {
+    background-color: white;
+    color: #b8860b;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.contact-section {
+    padding: 40px 20px;
+    background-color: white;
+    text-align: center;
+}
+
+.contact-section .cta-btn {
+    background-color: #b8860b;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+}

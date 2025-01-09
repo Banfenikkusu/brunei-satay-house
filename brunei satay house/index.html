@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order - Brunei Satay House</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        let totalAmount = 0;
+        const menuPrices = {
+            "familySetA": 25.00,
+            "familySetB": 30.00,
+            "sataySet1": 10.00,
+            "sataySet2": 15.00,
+            "sataySet3": 20.00
+        };
+
+        function calculateTotal() {
+            const quantities = {
+                "familySetA": parseInt(document.getElementById('familySetA-qty').value) || 0,
+                "familySetB": parseInt(document.getElementById('familySetB-qty').value) || 0,
+                "sataySet1": parseInt(document.getElementById('sataySet1-qty').value) || 0,
+                "sataySet2": parseInt(document.getElementById('sataySet2-qty').value) || 0,
+                "sataySet3": parseInt(document.getElementById('sataySet3-qty').value) || 0
+            };
+
+            let total = 0;
+            for (const [key, price] of Object.entries(menuPrices)) {
+                if (quantities[key] > 0) {
+                    total += quantities[key] * price;
+                }
+            }
+
+            totalAmount = total.toFixed(2);
+            document.getElementById('total-amount').innerText = `Total: $${totalAmount}`;
+        }
+
+        function processPayment() {
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+            const customerName = document.getElementById('customer-name').value || "Guest";
+            const tableNumber = document.getElementById('table-number').value || "Not Specified";
+            const quantities = {
+                "familySetA": parseInt(document.getElementById('familySetA-qty').value) || 0,
+                "familySetB": parseInt(document.getElementById('familySetB-qty').value) || 0,
+                "sataySet1": parseInt(document.getElementById('sataySet1-qty').value) || 0,
+                "sataySet2": parseInt(document.getElementById('sataySet2-qty').value) || 0,
+                "sataySet3": parseInt(document.getElementById('sataySet3-qty').value) || 0
+            };
+
+            let receiptItems = "";
+            for (const [key, qty] of Object.entries(quantities)) {
+                if (qty > 0) {
+                    const itemTotal = qty * menuPrices[key];
+                    receiptItems += `<p>${key.replace(/([A-Z])/g, ' $1')}: $${itemTotal.toFixed(2)} (${qty} x $${menuPrices[key].toFixed(2)})</p>`;
+                }
+            }
+
+            const orderNumber = Math.floor(Math.random() * 100000) + 1;
+
+            if (paymentMethod === "Counter") {
+                const receiptContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt - Brunei Satay House</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid #b8860b;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            color: #b8860b;
+        }
+        .receipt {
+            margin-top: 20px;
+        }
+        .receipt p {
+            margin: 5px 0;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+        .note {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Brunei Satay House Receipt</h1>
+    <div class="receipt">
+        <p><strong>Order Number:</strong> ${orderNumber}</p>
+        <p><strong>Customer Name:</strong> ${customerName}</p>
+        <p><strong>Table Number:</strong> ${tableNumber}</p>
+        ${receiptItems}
+        <p class="total">Total: $${totalAmount}</p>
+        <p><strong>Payment Method:</strong> Pay at Counter</p>
+    </div>
+    <p class="note">Please proceed to the counter to complete your payment. Thank you!</p>
+</body>
+</html>`;
+
+                const newTab = window.open();
+                newTab.document.open();
+                newTab.document.write(receiptContent);
+                newTab.document.close();
+            } else if (paymentMethod === "Online") {
+                const stripe = Stripe('pk_live_YcIgH4yiNcMUX73aJlhSWCOw00qyk67W7d'); // Replace with your Stripe public key
+
+                fetch('/create-checkout-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ amount: totalAmount })
+                })
+                    .then(response => response.json())
+                    .then(session => {
+                        return stripe.redirectToCheckout({ sessionId: session.id });
+                    })
+                    .then(result => {
+                        if (result.error) {
+                            alert(result.error.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="C:\Users\user\Documents\brunei satay house\Apps images\logo.jpg" alt="Brunei Satay House Logo">
+            </div>
+            <ul class="nav-links">
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#order">Order Now</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="menu" class="menu-section">
+        <h2>Order Your Favorite Set</h2>
+        <label for="customer-name">Enter Your Name:</label>
+        <input type="text" id="customer-name" name="customer-name" placeholder="e.g., John Doe">
+
+        <label for="table-number">Enter Your Table Number:</label>
+        <input type="text" id="table-number" name="table-number" placeholder="e.g., 12">
+
+        <div class="menu-item">
+            <img src="C:\Users\user\Documents\brunei satay house\Apps images\family set A.jpg" alt="Family Set A">
+            <h3>Family Set A</h3>
+            <p>Price: $25.00</p>
+            <label for="familySetA-qty">Quantity:</label>
+            <input type="number" id="familySetA-qty" name="familySetA-qty" min="0" value="0" onchange="calculateTotal()">
+        </div>
+        <div class="menu-item">
+            <img src="C:\Users\user\Documents\brunei satay house\Apps images\family set B.jpg" alt="Family Set B">
+            <h3>Family Set B</h3>
+            <p>Price: $30.00</p>
+            <label for="familySetB-qty">Quantity:</label>
+            <input type="number" id="familySetB-qty" name="familySetB-qty" min="0" value="0" onchange="calculateTotal()">
+        </div>
+        <div class="menu-item">
+            <img src="C:\Users\user\Documents\brunei satay house\Apps images\satay set 1.jpg" alt="Satay Set 1">
+            <h3>Satay Set 1</h3>
+            <p>Price: $10.00</p>
+            <label for="sataySet1-qty">Quantity:</label>
+            <input type="number" id="sataySet1-qty" name="sataySet1-qty" min="0" value="0" onchange="calculateTotal()">
+        </div>
+        <div class="menu-item">
+            <img src="C:\Users\user\Documents\brunei satay house\Apps images\satay set 2.jpg" alt="Satay Set 2">
+            <h3>Satay Set 2</h3>
+            <p>Price: $15.00</p>
+            <label for="sataySet2-qty">Quantity:</label>
+            <input type="number" id="sataySet2-qty" name="sataySet2-qty" min="0" value="0" onchange="calculateTotal()">
+        </div>
+        <div class="menu-item">
+            <img src="C:\Users\user\Documents\brunei satay house\Apps images\satay set 2.jpg" alt="Satay Set 3">
+            <h3>Satay Set 3</h3>
+            <p>Price: $20.00</p>
+            <label for="sataySet3-qty">Quantity:</label>
+            <input type="number" id="sataySet3-qty" name="sataySet3-qty" min="0" value="0" onchange="calculateTotal()">
+        </div>
+
+        <h3 id="total-amount">Total: $0.00</h3>
+
+        <h3>Choose Payment Method:</h3>
+        <label><input type="radio" name="payment-method" value="Counter" checked> Pay at Counter</label><br>
+        <label><input type="radio" name="payment-method" value="Online"> Pay Online</label><br>
+
+        <button style="margin-top: 20px;" onclick="processPayment()">Pay Now</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Brunei Satay House. All rights reserved.</p>
+    </footer>
+</body>
+</html>
